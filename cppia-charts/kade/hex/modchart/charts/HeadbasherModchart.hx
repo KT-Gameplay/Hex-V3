@@ -1,6 +1,6 @@
 // exported by mod-ed
 
-package modcharts.headbasher;
+package kade.hex.modchart.charts;
 
 import kade.hex.chart.Chart;
 import funkin.play.PlayState;
