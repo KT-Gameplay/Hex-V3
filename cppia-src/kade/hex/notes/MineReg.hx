@@ -8,6 +8,7 @@ import funkin.PlayerSettings;
 import funkin.audio.FunkinSound;
 import funkin.graphics.FunkinSprite;
 import funkin.input.PreciseInputManager;
+import funkin.mobile.ui.FunkinHitbox;
 import funkin.modding.events.ScriptEvent.NoteScriptEvent;
 import funkin.modding.events.ScriptEvent.HitNoteScriptEvent;
 import funkin.modding.events.ScriptEvent.UpdateScriptEvent;
@@ -17,6 +18,7 @@ import funkin.play.notes.NoteSprite;
 import funkin.play.notes.notekind.NoteKind;
 import funkin.util.Constants;
 import funkin.util.GRhythmUtil;
+import funkin.util.ReflectUtil;
 
 // stepmania based mine base class
 class MineReg extends NoteKind
@@ -170,9 +172,23 @@ class MineReg extends NoteKind
 		}
 
 		for (i in 0...COLUMNS)
-		{
 			pressed[i] = PreciseInputManager.instance.anyPressed(columnKeys[i]);
 
+		var box:FunkinHitbox = cast ReflectUtil.getProperty(PlayState.instance, "hitbox");
+		if (box != null && box.exists)
+		{
+			for (hint in box.members)
+			{
+				if (hint == null || !hint.exists || !hint.pressed) continue;
+
+				@:privateAccess
+				var lane:Int = hint.noteDirection;
+				if (lane >= 0 && lane < COLUMNS) pressed[lane] = true;
+			}
+		}
+
+		for (i in 0...COLUMNS)
+		{
 			if (pressed[i]) tapDur[i] += elapsedMs;
 			else tapDur[i] = 0;
 		}
