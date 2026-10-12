@@ -703,7 +703,7 @@ class HexFreeplay extends MusicBeatState
     popUp.onClose = onNoticeClosed;
 
     var options:Dynamic = Save.instance.getModOptions("hex");
-    if (options.seenVersionNotice != true) popUp.show();
+    if (!HexTouch.mobile && options.seenVersionNotice != true) popUp.show();
 
     if (songs.length <= 0)
     {
